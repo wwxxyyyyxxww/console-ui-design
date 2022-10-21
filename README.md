@@ -1,6 +1,6 @@
 # 前端组件库
 
-monorepo + typescript + tsx + vitest + pnpm + eslint + husky + 自动部署 + vuepress@next
+monorepo + typescript + tsx  + pnpm + eslint + husky + 自动部署 + vuepress@next
 
 
 es  // button import es6 按需加载 vite tree shaking
@@ -17,6 +17,6 @@ chore: 构建过程或者其他无关的改动
 
 refactor: 重构
 
-ci: 持续集成,自动部署
+ci: 持续集成,自动部署 TODO
 
-wx: aibayanyu2022
+
