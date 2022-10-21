@@ -10,13 +10,13 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'vue',
-        '@yanyu-fe/utils',
+        'utils',
       ],
       output: {
         exports: 'named',
         globals: {
           'vue': 'Vue',
-          '@yanyu-fe/utils': 'yanyuUtils',
+          'utils': 'yanyuUtils',
         },
       },
     },

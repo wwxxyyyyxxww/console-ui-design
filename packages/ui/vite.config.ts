@@ -11,7 +11,7 @@ export default defineConfig({
     emptyOutDir: true,
     minify: false,
     rollupOptions: {
-      external: ["vue", "@yanyu-fe/utils"],
+      external: ["vue", "utils"],
       input: ["src/index.ts"],
       output: [
         // esm
