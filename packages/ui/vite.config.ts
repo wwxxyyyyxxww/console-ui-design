@@ -8,7 +8,7 @@ export default defineConfig({
     target: "modules",
     // 指定输出路径
     outDir: "es",
-    emptyOutDir: false,
+    emptyOutDir: true,
     minify: false,
     rollupOptions: {
       external: ["vue", "@yanyu-fe/utils"],
