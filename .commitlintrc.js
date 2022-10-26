@@ -8,7 +8,7 @@ module.exports = {
             'always',
             [
                 'build',
-                'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'revert', 'style', 'test', 'chore'
+                'ci', 'docs', 'feat', 'fix', 'perf', 'refactor', 'revert', 'style', 'test', 'chore', 'release'
             ]
         ]
     }

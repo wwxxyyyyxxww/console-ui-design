@@ -11,6 +11,7 @@ const preId =
   args.preid ||
   (semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0]);
 const isDryRun = args.dry;
+console.log(args,'-------------')
 // const skipTests = args.skipTests;
 const skipBuild = args.skipBuild;
 const packages = fs.readdirSync(path.resolve(__dirname, "../packages"));
@@ -115,7 +116,7 @@ async function main() {
   if (stdout) {
     step("\nCommitting changes...");
     await runIfNotDry("git", ["add", "-A"]);
-    await runIfNotDry("git", ["commit", "-m", `release: v${targetVersion}`]);
+    await runIfNotDry("git", ["commit", "-m", `feat: update version`]);
   } else {
     console.log("No changes to commit.");
   }
@@ -211,14 +212,9 @@ async function publishPackage(pkgName, version, runIfNotDry) {
     await runIfNotDry(
       // note: use of yarn is intentional here as we rely on its publishing
       // behavior.
-      "yarn",
+      "pnpm",
       [
         "publish",
-        "--new-version",
-        version,
-        ...(releaseTag ? ["--tag", releaseTag] : []),
-        "--access",
-        "public",
       ],
       {
         cwd: pkgRoot,
