@@ -1,8 +1,5 @@
 <template>
-  <y-button type="primary">
-    Basic
-  </y-button>
+  <c-button type="primary"> Basic </c-button>
 </template>
 
-<script lang="ts" setup>
-</script>
+<script lang="ts" setup></script>

@@ -5,12 +5,12 @@ const files = fg.sync('**/style/index.ts', {
   cwd: process.cwd(),
   onlyFiles: true,
 })
-
+console.log(files,'files')
 export default defineConfig({
   build: {
     target: 'modules',
     outDir: 'es',
-    emptyOutDir: false,
+    emptyOutDir: true,
     minify: false,
     rollupOptions: {
       external: /\.less$/,

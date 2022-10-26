@@ -19,7 +19,7 @@ export default defineConfig({
       },
     },
     lib: {
-      entry: "src/index.ts",
+      entry: "../packages/ui/src/index.ts",
       formats: ["umd", "cjs", "es"],
       name: "consoleui",
     },

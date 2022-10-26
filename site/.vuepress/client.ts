@@ -1,10 +1,10 @@
 import {  defineClientConfig } from "@vuepress/client";
 // @ts-ignore
-import uiDesign from "ui-design";
-import "ui-design/style";
+import consoleUI from "console-ui";
+import "console-ui/style";
 
 export default defineClientConfig({
     enhance({app}){
-        app.use(uiDesign);
+        app.use(consoleUI);
     }
 })

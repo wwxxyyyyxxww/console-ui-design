@@ -1,6 +1,6 @@
 {
-  "name": "utils",
-  "version": "1.0.0",
+  "name": "@console-ui/utils",
+  "version": "1.0.1",
   "description": "",
   "keywords": [],
   "license": "ISC",
@@ -13,6 +13,10 @@
   },
   "dependencies": {
     "vue": "^3.2.35"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "http://192.168.208.21:8081/repository/consoleNpm/"
   },
   "devDependencies": {
     "@vue/tsconfig": "^0.1.3",

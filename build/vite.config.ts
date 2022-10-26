@@ -12,7 +12,7 @@ export default defineConfig({
     minify: false,
     rollupOptions: {
       external: ["vue", "@console-ui/utils"],
-      input: ["src/index.ts"],
+      input: ["../packages/ui/src/index.ts"],
       output: [
         // esm
 
@@ -21,7 +21,7 @@ export default defineConfig({
           dir: "es",
           entryFileNames: "[name].js",
           preserveModules: true,
-          preserveModulesRoot: "src",
+          preserveModulesRoot: "../packages/ui/src",
         },
         // cjs
         {
@@ -29,13 +29,13 @@ export default defineConfig({
           dir: "lib",
           entryFileNames: "[name].js",
           preserveModules: true,
-          preserveModulesRoot: "src",
+          preserveModulesRoot: "../packages/ui/src",
         },
       ],
     },
     // 这一块是不会被使用的
     lib: {
-      entry: "src/index.ts",
+      entry: "../packages/ui/src/index.ts",
       formats: ["es", "cjs"],
     },
   },
