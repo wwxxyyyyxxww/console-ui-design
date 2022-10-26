@@ -11,15 +11,14 @@ const preId =
   args.preid ||
   (semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0]);
 const isDryRun = args.dry;
-// const skipTests = args.skipTests;
+const skipTests = args.skipTests;
 const skipBuild = args.skipBuild;
-const packages = fs.readdirSync(path.resolve(__dirname, "../packages"));
-// .filter((p) => !p.endsWith(".ts") && !p.startsWith("."));
+const packages = fs
+  .readdirSync(path.resolve(__dirname, "../packages"))
+  .filter((p) => !p.endsWith(".ts") && !p.startsWith("."));
 
 const skippedPackages = [];
-// patch：补丁
-// minor：小修小改
-// major：大改
+
 const versionIncrements = [
   "patch",
   "minor",
@@ -80,13 +79,13 @@ async function main() {
   }
 
   // run tests before release
-  // step("\nRunning tests...");
-  // if (!skipTests && !isDryRun) {
-  //   await run(bin("jest"), ["--clearCache"]);
-  //   await run("pnpm", ["test", "--bail"]);
-  // } else {
-  //   console.log(`(skipped)`);
-  // }
+  step("\nRunning tests...");
+  if (!skipTests && !isDryRun) {
+    await run(bin("jest"), ["--clearCache"]);
+    await run("pnpm", ["test", "--bail"]);
+  } else {
+    console.log(`(skipped)`);
+  }
 
   // update all package versions and inter-dependencies
   step("\nUpdating cross dependencies...");
@@ -95,27 +94,27 @@ async function main() {
   // build all packages with types
   step("\nBuilding all packages...");
   if (!skipBuild && !isDryRun) {
-    await run("pnpm", ["build"]);
+    await run("pnpm", ["run", "build", "--release"]);
     // test generated dts files
-    // step("\nVerifying type declarations...");
-    // await run("pnpm", ["run", "test-dts-only"]);
+    step("\nVerifying type declarations...");
+    await run("pnpm", ["run", "test-dts-only"]);
   } else {
     console.log(`(skipped)`);
   }
 
   // generate changelog
-  // step("\nGenerating changelog...");
-  // await run(`pnpm`, ["run", "changelog"]);
+  step("\nGenerating changelog...");
+  await run(`pnpm`, ["run", "changelog"]);
 
   // update pnpm-lock.yaml
   step("\nUpdating lockfile...");
-  await run(`pnpm`, ["install"]);
+  await run(`pnpm`, ["install", "--prefer-offline"]);
 
   const { stdout } = await run("git", ["diff"], { stdio: "pipe" });
   if (stdout) {
     step("\nCommitting changes...");
     await runIfNotDry("git", ["add", "-A"]);
-    await runIfNotDry("git", ["commit", "-m", `feat: update version`]);
+    await runIfNotDry("git", ["commit", "-m", `release: v${targetVersion}`]);
   } else {
     console.log("No changes to commit.");
   }
@@ -147,34 +146,30 @@ async function main() {
   }
   console.log();
 }
-// version 为目标版本号
+
 function updateVersions(version) {
   // 1. update root package.json
   updatePackage(path.resolve(__dirname, ".."), version);
   // 2. update all packages
   packages.forEach((p) => updatePackage(getPkgRoot(p), version));
 }
-// 找到路径下的package.json文件然后读取文件内容，转成对象，更新版本，再写回文件。
+
 function updatePackage(pkgRoot, version) {
   const pkgPath = path.resolve(pkgRoot, "package.json");
   const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"));
   pkg.version = version;
   updateDeps(pkg, "dependencies", version);
   updateDeps(pkg, "peerDependencies", version);
-  // null所有属性被序列化,缩进2空格
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n");
 }
 
 function updateDeps(pkg, depType, version) {
   const deps = pkg[depType];
   if (!deps) return;
-  // packages里面的包里面的dependencies以及peerDependencies引用的依赖
-  // 以@console-ui开头并且packages里面存在这个包,全都改成设置的版本
   Object.keys(deps).forEach((dep) => {
-    console.log(deps[dep], deps, dep);
     if (
-      dep.startsWith("@console-ui") &&
-      packages.includes(dep.replace(/^@console-ui\//, ""))
+      dep === "vue" ||
+      (dep.startsWith("@vue") && packages.includes(dep.replace(/^@vue\//, "")))
     ) {
       console.log(
         chalk.yellow(`${pkg.name} -> ${depType} -> ${dep}@${version}`)
@@ -211,8 +206,15 @@ async function publishPackage(pkgName, version, runIfNotDry) {
     await runIfNotDry(
       // note: use of yarn is intentional here as we rely on its publishing
       // behavior.
-      "pnpm",
-      ["publish"],
+      "yarn",
+      [
+        "publish",
+        "--new-version",
+        version,
+        ...(releaseTag ? ["--tag", releaseTag] : []),
+        "--access",
+        "public",
+      ],
       {
         cwd: pkgRoot,
         stdio: "pipe",
