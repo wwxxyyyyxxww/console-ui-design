@@ -109,13 +109,13 @@ async function main() {
 
   // update pnpm-lock.yaml
   step("\nUpdating lockfile...");
-  await run(`pnpm`, ["install"]);
+  await run(`pnpm`, ["install", "--prefer-offline"]);
 
   const { stdout } = await run("git", ["diff"], { stdio: "pipe" });
   if (stdout) {
     step("\nCommitting changes...");
     await runIfNotDry("git", ["add", "-A"]);
-    await runIfNotDry("git", ["commit", "-m", `feat: update version`]);
+    await runIfNotDry("git", ["commit", "-m", `release: v${targetVersion}`]);
   } else {
     console.log("No changes to commit.");
   }

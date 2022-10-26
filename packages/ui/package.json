@@ -1,6 +1,6 @@
 {
   "name": "@console-ui/console-ui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "keywords": [],
   "license": "ISC",
@@ -34,7 +34,7 @@
     "build": "run-s build:comp genColor  bundleLess bundleStyle bundleMin"
   },
   "dependencies": {
-    "@console-ui/utils": "1.0.3",
+    "@console-ui/utils": "1.0.4",
     "vue": "^3.2.35"
   },
   "devDependencies": {
