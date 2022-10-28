@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     target: 'modules',
     outDir: 'es',
-    emptyOutDir: true,
+    emptyOutDir: false,
     minify: false,
     rollupOptions: {
       external: /\.less$/,
