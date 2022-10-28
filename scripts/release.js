@@ -171,7 +171,6 @@ function updateDeps(pkg, depType, version) {
   // packages里面的包里面的dependencies以及peerDependencies引用的依赖
   // 以@console-ui开头并且packages里面存在这个包,全都改成设置的版本
   Object.keys(deps).forEach((dep) => {
-    console.log(deps[dep], deps, dep);
     if (
       dep.startsWith("@console-ui") &&
       packages.includes(dep.replace(/^@console-ui\//, ""))
